@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sudoku Solver</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 20px;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+        td span {
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            line-height: 40px;
+        }
+        td.selected {
+            background-color: lightblue;
+        }
+    </style>
+    <script>
+        let selectedRow = -1;
+        let selectedCol = -1;
+
+        function updateCell(row, col, val) {
+            fetch('/api/update?row=' + row + '&col=' + col + '&val=' + val, {
+                method: 'PUT'
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        document.getElementById(`cell-${row}-${col}`).innerText = (val === '.' ? '' : val);
+                    }
+                });
+        }
+
+        function selectCell(row, col) {
+            document.querySelectorAll("td").forEach(cell => cell.classList.remove("selected"));
+            let cell = document.getElementById(`cell-${row}-${col}`);
+            if (cell) {
+                cell.classList.add("selected");
+                selectedRow = row;
+                selectedCol = col;
+            }
+        }
+    </script>
+</head>
+<body>
+<h2>Sudoku Solver</h2>
+<table>
+    <tbody>
+    <tr th:each="r, rowStat : ${board.board}">
+        <td th:each="cell, colStat : ${r}"
+            th:id="'cell-' + ${rowStat.index} + '-' + ${colStat.index}"
+            th:onclick="'selectCell(' + ${rowStat.index} + ', ' + ${colStat.index} + ')'">
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>輸入數字</h3>
+<div>
+    <button th:each="num : ${#numbers.sequence(1, 9)}"
+            th:text="${num}"
+            onclick="if (selectedRow !== -1 && selectedCol !== -1) updateCell(selectedRow, selectedCol, this.innerText)">
+    </button>
+    <!-- 清空格子（. 會顯示空白） -->
+    <button onclick="if (selectedRow !== -1 && selectedCol !== -1) updateCell(selectedRow, selectedCol, '.')">清空</button>
+</div>
+
+<form action="/solution" method="post">
+    <button type="submit">求解</button>
+</form>
+</body>
+</html>

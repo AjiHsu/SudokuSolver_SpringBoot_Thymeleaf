@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>錯誤頁面</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .error-message {
+      color: red;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="error-message">
+  <h2>發生錯誤！</h2>
+  <p th:text="'錯誤訊息: ' + '棋盤有誤'"></p>
+</div>
+
+<button onclick="window.location.href='/home';">返回首頁</button>
+</body>
+</html>

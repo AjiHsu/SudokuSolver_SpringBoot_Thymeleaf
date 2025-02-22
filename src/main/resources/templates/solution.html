@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Sudoku Solution</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    td {
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 20px;
+      border: 1px solid black;
+    }
+    td span {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      line-height: 40px; /* 確保內容垂直置中 */
+    }
+  </style>
+</head>
+<body>
+<h2>Sudoku 解答</h2>
+<table>
+  <tbody>
+  <tr th:each="r, rowStat : ${board.board}">
+    <td th:each="cell, colStat : ${r}">
+      <span th:text="${cell}"></span>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<br>
+<a href="/home"><button>返回</button></a>
+</body>
+</html>
